@@ -3,14 +3,13 @@ import 'package:equatable/equatable.dart';
 import 'package:json_http_test/WeatherModel.dart';
 import 'package:json_http_test/WeatherRepo.dart';
 
-class WeatherEvent extends Equatable{
+class WeatherEvent extends Equatable {
   @override
   // TODO: implement props
   List<Object> get props => [];
-
 }
 
-class FetchWeather extends WeatherEvent{
+class FetchWeather extends WeatherEvent {
   final _city;
 
   FetchWeather(this._city);
@@ -20,27 +19,19 @@ class FetchWeather extends WeatherEvent{
   List<Object> get props => [_city];
 }
 
-class ResetWeather extends WeatherEvent{
+class ResetWeather extends WeatherEvent {}
 
-}
-
-class WeatherState extends Equatable{
+class WeatherState extends Equatable {
   @override
   // TODO: implement props
   List<Object> get props => [];
-
 }
 
+class WeatherIsNotSearched extends WeatherState {}
 
-class WeatherIsNotSearched extends WeatherState{
+class WeatherIsLoading extends WeatherState {}
 
-}
-
-class WeatherIsLoading extends WeatherState{
-
-}
-
-class WeatherIsLoaded extends WeatherState{
+class WeatherIsLoaded extends WeatherState {
   final _weather;
 
   WeatherIsLoaded(this._weather);
@@ -52,12 +43,9 @@ class WeatherIsLoaded extends WeatherState{
   List<Object> get props => [_weather];
 }
 
-class WeatherIsNotLoaded extends WeatherState{
+class WeatherIsNotLoaded extends WeatherState {}
 
-}
-
-class WeatherBloc extends Bloc<WeatherEvent, WeatherState>{
-
+class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherRepo weatherRepo;
 
   WeatherBloc(this.weatherRepo);
@@ -67,21 +55,20 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState>{
   WeatherState get initialState => WeatherIsNotSearched();
 
   @override
-  Stream<WeatherState> mapEventToState(WeatherEvent event) async*{
+  Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
     // TODO: implement mapEventToState
-    if(event is FetchWeather){
+    if (event is FetchWeather) {
       yield WeatherIsLoading();
 
-      try{
+      try {
         WeatherModel weather = await weatherRepo.getWeather(event._city);
         yield WeatherIsLoaded(weather);
-      }catch(_){
+      } catch (_) {
         print(_);
         yield WeatherIsNotLoaded();
       }
-    }else if(event is ResetWeather){
+    } else if (event is ResetWeather) {
       yield WeatherIsNotSearched();
     }
   }
-
 }
