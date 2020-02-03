@@ -75,16 +75,20 @@ class MovieListPage extends StatelessWidget {
       builder: (context, state) {
         if (state is MovieIsNotSearched)
           return Center(
-            child: Container(),
+            child: Container(
+              child: Text("Tap on search"),
+            ),
           );
         else if (state is MovieIsLoading)
           return Center(child: CircularProgressIndicator());
         else if (state is MovieIsLoaded)
           return buildList(state.getMovies);
         else
-          return Text(
-            "Error",
-            style: TextStyle(color: Colors.white),
+          return Center(
+            child: Text(
+              "Error",
+              style: TextStyle(color: Colors.white),
+            ),
           );
       },
     );
